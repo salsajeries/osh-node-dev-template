@@ -1,0 +1,47 @@
+description = 'Temperature/Humidity Sensor'
+ext.details = "Temperature and humidity sensor for Raspberry Pi"
+version = '1.0.0'
+
+dependencies {
+    implementation 'org.sensorhub:sensorhub-core:' + oshCoreVersion
+
+    // Pi4J Dependencies
+//    implementation "com.pi4j:pi4j-core:2.8.0"
+//    implementation "com.pi4j:pi4j-plugin-raspberrypi:2.8.0"
+//    implementation 'com.pi4j:pi4j-plugin-pigpio:2.8.0'
+    implementation group: 'com.pi4j', name: 'pi4j-core', version: '2.8.0'
+    implementation group: 'com.pi4j', name: 'pi4j-plugin-gpiod', version: '2.8.0'
+    implementation group: 'com.pi4j', name: 'pi4j-plugin-pigpio', version: '2.8.0'
+
+//    implementation project(':sensorhub-service-video')
+//    implementation project(':sensorhub-driver-videocam')
+    testImplementation('junit:junit:4.13.1')
+}
+
+// exclude tests requiring connection to the sensor
+// these have to be run manually
+//      If tests are to be excluded list them here as follows
+//          exclude '**/TestNameClass.class'
+test {
+    useJUnit()
+}
+
+// add info to OSGi manifest
+osgi {
+    manifest {
+        attributes ('Bundle-Vendor': 'Botts Inc')
+        attributes ('Bundle-Activator': 'com.sample.impl.sensor.hw507.Activator')
+    }
+}
+
+// add info to maven pom
+ext.pom >>= {
+    developers {
+        developer {
+            id 'salwa.jeries@botts-inc.com'
+            name 'Salwa Jeries'
+            organization 'Botts Inc'
+            organizationUrl 'https://botts-inc.com'
+        }
+    }
+}

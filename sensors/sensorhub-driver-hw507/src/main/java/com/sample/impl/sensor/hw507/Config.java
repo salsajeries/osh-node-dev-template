@@ -11,7 +11,7 @@
  Copyright (C) 2020-2021 Botts Innovative Research, Inc. All Rights Reserved.
 
 ******************************* END LICENSE BLOCK ***************************/
-package com.sample.impl.sensor.drivername;
+package com.sample.impl.sensor.hw507;
 
 import org.sensorhub.api.config.DisplayInfo;
 import org.sensorhub.api.sensor.SensorConfig;
@@ -38,5 +38,14 @@ public class Config extends SensorConfig {
      */
     @DisplayInfo.Required
     @DisplayInfo(desc = "Serial number or unique identifier")
-    public String serialNumber = "sensor001";
+    public String serialNumber = "0001";
+
+    @DisplayInfo.Required
+    @DisplayInfo(desc = "GPIO pin for reading data from the sensor")
+    public String gpioInput = "17";
+
+    @DisplayInfo.Required
+    public String command = String.valueOf(true);
+
+    public Config() { this.moduleClass = Sensor.class.getCanonicalName(); }
 }
