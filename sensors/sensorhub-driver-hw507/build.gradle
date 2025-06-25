@@ -9,9 +9,15 @@ dependencies {
 //    implementation "com.pi4j:pi4j-core:2.8.0"
 //    implementation "com.pi4j:pi4j-plugin-raspberrypi:2.8.0"
 //    implementation 'com.pi4j:pi4j-plugin-pigpio:2.8.0'
-    implementation group: 'com.pi4j', name: 'pi4j-core', version: '2.8.0'
-    implementation group: 'com.pi4j', name: 'pi4j-plugin-gpiod', version: '2.8.0'
-    implementation group: 'com.pi4j', name: 'pi4j-plugin-pigpio', version: '2.8.0'
+//    implementation group: 'com.pi4j', name: 'pi4j-core', version: '2.8.0'
+//    implementation group: 'com.pi4j', name: 'pi4j-plugin-gpiod', version: '2.8.0'
+//    implementation group: 'com.pi4j', name: 'pi4j-plugin-pigpio', version: '2.8.0'
+        implementation 'com.pi4j:pi4j-plugin-linuxfs:2.8.0'
+
+        implementation 'com.pi4j:pi4j-core:2.8.0'
+        implementation 'com.pi4j:pi4j-plugin-gpiod:2.8.0'
+        implementation 'com.pi4j:pi4j-plugin-pigpio:2.8.0'
+        implementation 'com.pi4j:pi4j-library-gpiod:2.8.0'  // ← THIS ONE!
 
 //    implementation project(':sensorhub-service-video')
 //    implementation project(':sensorhub-driver-videocam')

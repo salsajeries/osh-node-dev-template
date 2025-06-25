@@ -37,8 +37,6 @@ public class Sensor extends AbstractSensorModule<Config> {
 
     //private static final Logger logger = LoggerFactory.getLogger(Sensor.class);
 
-
-
     private Context pi4j;
     private DigitalInput gpioInput;
 
@@ -67,8 +65,6 @@ public class Sensor extends AbstractSensorModule<Config> {
             // gpioInput.setPull(PullResistance.PULL_DOWN);
 
             this.gpioInput = pi4j.create(inputConfig);
-
-            DigitalStateChangeEvent
 
             // Add listener to read sensor dynamically
             this.gpioInput.addListener((DigitalStateChangeEvent e) -> {
