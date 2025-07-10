@@ -9,7 +9,7 @@
 
  Copyright (C) 2025 Botts Innovative Research, Inc. All Rights Reserved.
  ******************************* END LICENSE BLOCK ***************************/
-package com.sample.impl.sensor.drivername;
+package com.sample.impl.sensor.dht22;
 
 import org.junit.After;
 import org.junit.Before;

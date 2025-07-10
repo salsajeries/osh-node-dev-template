@@ -15,6 +15,9 @@ includeBuild gradle.oshCoreDir
 include 'sensorhub-test'
 project(':sensorhub-test').projectDir = "$toolsDir/sensorhub-test" as File
 
+// Include DHT22 sensor
+include ':sensorhub-driver-dht22'
+project(':sensorhub-driver-dht22').projectDir = "$sensorDir/sensorhub-driver-dht22" as File
 
 // osh-storage
 //include '[storage-module-name]'
@@ -53,19 +56,23 @@ project(':sensorhub-test').projectDir = "$toolsDir/sensorhub-test" as File
 FileTree subprojects = fileTree("$rootDir/sensors").include('**/build.gradle')
 subprojects.files.each { File f ->
     File projectFolder = f.parentFile
-    if (projectFolder != rootDir) {
-        String projectName = ':' + projectFolder.name
-        include projectName
-        project(projectName).projectDir = projectFolder
+    if (!projectFolder.name.contains("template")) {
+        if (projectFolder != rootDir) {
+            String projectName = ':' + projectFolder.name
+            include projectName
+            project(projectName).projectDir = projectFolder
+        }
     }
 }
 
 FileTree processProjects = fileTree("$rootDir/processing").include('**/build.gradle')
 processProjects.files.each { File f ->
     File projectFolder = f.parentFile
-    if (projectFolder != rootDir) {
-        String projectName = ':' + projectFolder.name
-        include projectName
-        project(projectName).projectDir = projectFolder
+    if (!projectFolder.name.contains("template")) {
+        if (projectFolder != rootDir) {
+            String projectName = ':' + projectFolder.name
+            include projectName
+            project(projectName).projectDir = projectFolder
+        }
     }
 }
