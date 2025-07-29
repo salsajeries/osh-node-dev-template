@@ -17,6 +17,7 @@ import net.opengis.swe.v20.DataEncoding;
 import net.opengis.swe.v20.DataRecord;
 import org.sensorhub.api.data.DataEvent;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;
+import org.vast.swe.SWEHelper;
 import org.vast.swe.helper.GeoPosHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,13 +78,18 @@ public class Output extends AbstractSensorOutput<Sensor> implements Runnable {
                 .addField("timestamp", sweFactory.createTime()
                         .asSamplingTimeIsoUTC()
                         .label("Timestamp")
-                        .description("Time of data collection"))
-                .addField("temperature", sweFactory.createText()
+                        .description("Time of data collection")
+                        .definition(SWEHelper.getPropertyUri("Time")))
+                .addField("temperature", sweFactory.createQuantity()
                         .label("Temperature")
-                        .description("Recorded temperature in Celsius"))
-                .addField("humidity", sweFactory.createText()
+                        .description("Recorded temperature in Celsius")
+                        .uom("Cel")
+                        .definition(SWEHelper.getPropertyUri("Temperature")))
+                .addField("humidity", sweFactory.createQuantity()
                         .label("Humidity")
-                        .description("Humidity percentage"))
+                        .description("Humidity percentage")
+                        .uom("%")
+                        .definition(SWEHelper.getPropertyUri("Humidity")))
                 .build();
 
         dataEncoding = sweFactory.newTextEncoding(",", "\n");
@@ -177,34 +183,35 @@ public class Output extends AbstractSensorOutput<Sensor> implements Runnable {
                 ++setCount;
 
                 double timestamp = System.currentTimeMillis() / 1000d;
-                String temperatureC, temperatureF, humidity;
+                double temperatureC = Double.NaN, temperatureF = Double.NaN, humidity = Double.NaN;
 
+                // Only publish data when valid readings received
                 try {
-                    exec.runPy();   // RUN PYTHON SCRIPT
-                    temperatureC = exec.getTemperatureC();
-                    temperatureF = exec.getTemperatureF();
-                    humidity = exec.getHumidity();
+                    // Call python script
+                    double[] readResults = exec.runPy();
+                    // Store values locally
+                    temperatureC = readResults[0];
+                    temperatureF = readResults[1];  // Not used
+                    humidity = readResults[2];
+
+                    // TODO: Populate data block
+                    dataBlock.setDoubleValue(0, timestamp);
+                    dataBlock.setDoubleValue(1, temperatureC);
+                    dataBlock.setDoubleValue(2, humidity);
+
+                    latestRecord = dataBlock;
+                    latestRecordTime = System.currentTimeMillis();
+                    eventHandler.publish(new DataEvent(latestRecordTime, Output.this, dataBlock));
+
                 } catch (Exception e) {
                     logger.error("Error reading data from sensor");
-                    temperatureC = "Error reading temperatureC";
-                    temperatureF = "Error reading temperatureF";
-                    humidity = "Error reading humidity";
                 }
-
-                // TODO: Populate data block
-                dataBlock.setDoubleValue(0, timestamp);
-                dataBlock.setStringValue(1, temperatureF);
-                dataBlock.setStringValue(2, humidity);
-
-                latestRecord = dataBlock;
-
-                latestRecordTime = System.currentTimeMillis();
-
-                eventHandler.publish(new DataEvent(latestRecordTime, Output.this, dataBlock));
 
                 synchronized (processingLock) {
                     processSets = !stopProcessing;
                 }
+
+                Thread.sleep(2000); // Sleep 2 sec
             }
 
         } catch (Exception e) {

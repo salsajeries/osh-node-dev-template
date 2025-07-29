@@ -33,5 +33,5 @@ public class Config extends SensorConfig {
      */
     @DisplayInfo.Required
     @DisplayInfo(desc = "Serial number or unique identifier")
-    public String serialNumber = "dht22";
+    public String serialNumber = "160202790";
 }

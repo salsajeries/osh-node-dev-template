@@ -10,7 +10,7 @@ public class DHTExecutor {
     private double temperatureC;
     private double humidity;
 
-    public void runPy() throws Exception {
+    public double[] runPy() throws Exception {
         System.out.println("Starting reading...");
 
         boolean success = false;
@@ -34,7 +34,7 @@ public class DHTExecutor {
                     success = true;
                 }
             } else {
-                System.out.println("ERROR from script: " + line);
+                //System.out.println("ERROR from script: " + line);
             }
 
             process.waitFor();
@@ -46,8 +46,10 @@ public class DHTExecutor {
         if (success) {
             System.out.printf("Temperature: %.1f°C (%.1f°F)%n", temperatureC, temperatureF);
             System.out.printf("Humidity: %.1f%%%n", humidity);
+            return new double[] {temperatureC, temperatureF, humidity};
         } else {
             System.out.println("Failed to read valid sensor data.");
+            return new double[] {};
         }
     }
 
