@@ -6,3 +6,6 @@
 	path = include/osh-addons
 	url = https://github.com/opensensorhub/osh-addons.git
 	branch = master
+[submodule "include/botts-addons"]
+	path = include/botts-addons
+	url = https://github.com/Botts-Innovative-Research/botts-addons.git
